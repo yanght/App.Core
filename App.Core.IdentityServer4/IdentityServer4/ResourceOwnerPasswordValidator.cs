@@ -4,7 +4,7 @@ using App.Core.IRepositories;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using App.Core.Application.Contracts.Cms.Users;
+using App.Core.Application.Contracts.Users;
 
 namespace App.Core.IdentityServer4.IdentityServer4
 {

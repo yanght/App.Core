@@ -1,4 +1,4 @@
-﻿using App.Core.Application.Contracts.Cms.Users.Dtos;
+﻿using App.Core.Application.Contracts.Users.Dtos;
 using App.Core.Data;
 using App.Core.Data.Enum;
 using App.Core.Entities;
@@ -35,7 +35,7 @@ namespace App.Core.Application.Contracts.Users
         /// <param name="groupIds"></param>
         Task CreateAsync(UserEntity user, List<long> groupIds, string password);
 
-        //Task UpdateAync(long id, UpdateUserDto updateUserDto);
+        Task UpdateAync(long id, UpdateUserDto updateUserDto);
 
         Task DeleteAsync(long id);
 

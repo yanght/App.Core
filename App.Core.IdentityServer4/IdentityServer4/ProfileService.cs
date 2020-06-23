@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using App.Core.IRepositories;
+using App.Core.Security;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -58,11 +59,11 @@ namespace App.Core.IdentityServer4.IdentityServer4
                     new Claim(ClaimTypes.Name, user.Username ?? ""),
                 };
 
-                //user.LinGroups?.ForEach(r =>
-                // {
-                //     claims.Add(new Claim(ClaimTypes.Role, r.Name));
-                //     claims.Add(new Claim(LinCmsClaimTypes.Groups, r.Id.ToString()));
-                // });
+                user.Groups?.ForEach(r =>
+                 {
+                     claims.Add(new Claim(ClaimTypes.Role, r.Name));
+                     claims.Add(new Claim(AppClaimTypes.Groups, r.Id.ToString()));
+                 });
 
                 context.IssuedClaims = claims;
             }

@@ -65,6 +65,10 @@ namespace App.Core.Entities
         /// </summary>
         public DateTime LastLoginTime { get; set; }
 
+        [Navigate(ManyToMany = typeof(UserGroupEntity))]
+        public virtual ICollection<GroupEntity>Groups { get; set; }
+        [Navigate("UserId")]
+        public virtual ICollection<UserGroupEntity> UserGroups { get; set; }
         [Navigate("CreateUserId")]
         public virtual ICollection<UserIdentity> UserIdentitys { get; set; }
 

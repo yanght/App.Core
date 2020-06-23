@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Core.Application.Contracts.Cms.Users.Dtos
+namespace App.Core.Application.Contracts.Users.Dtos
 {
     public class UpdateNicknameDto
     {

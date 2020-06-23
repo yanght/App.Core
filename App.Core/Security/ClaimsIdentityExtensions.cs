@@ -19,7 +19,7 @@ namespace App.Core.Security
 
         public static bool? IsAdmin(this ClaimsPrincipal principal)
         {
-            Claim isAdminOrNull = principal.Claims?.FirstOrDefault(c => c.Type == LinCmsClaimTypes.IsAdmin);
+            Claim isAdminOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AppClaimTypes.IsAdmin);
             if (isAdminOrNull == null || isAdminOrNull.Value.IsNullOrWhiteSpace())
             {
                 return null;

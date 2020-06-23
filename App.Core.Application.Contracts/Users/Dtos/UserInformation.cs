@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using App.Core.Application.Contracts.Groups.Dtos;
 using App.Core.Entities;
 
-namespace App.Core.Application.Contracts.Cms.Users.Dtos
+namespace App.Core.Application.Contracts.Users.Dtos
 {
     public class UserInformation : EntityDto
     {
@@ -29,7 +30,7 @@ namespace App.Core.Application.Contracts.Cms.Users.Dtos
         /// <summary>
         /// 用户所属的权限组id
         /// </summary>
-        //public List<GroupDto> Groups { get; set; }
+        public List<GroupDto> Groups { get; set; }
 
         public string Introduction { get; set; }
         public string Username { get; set; }

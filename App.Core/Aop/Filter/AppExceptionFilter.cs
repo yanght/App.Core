@@ -27,15 +27,15 @@ namespace App.Core.Aop.Filter
 
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception is AppException cmsException)
+            if (context.Exception is AppException appException)
             {
                 HandlerException(context,
                     new UnifyResponseDto()
                     {
-                        Message = cmsException.Message,
-                        Code = cmsException.GetErrorCode()
+                        Message = appException.Message,
+                        Code = appException.GetErrorCode()
                     },
-                    cmsException.GetCode()
+                    appException.GetCode()
                     );
                 return;
             }

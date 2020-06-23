@@ -9,9 +9,9 @@ using App.Core.Entities;
 using App.Core.IRepositories;
 using AspNet.Security.OAuth.GitHub;
 using AspNet.Security.OAuth.QQ;
-using App.Core.Application.Contracts.Cms.Users;
+using App.Core.Application.Contracts.Users;
 
-namespace App.Core.Application.Cms.Users
+namespace App.Core.Application.Users
 {
     public class UserIdentityService : IUserIdentityService
     {

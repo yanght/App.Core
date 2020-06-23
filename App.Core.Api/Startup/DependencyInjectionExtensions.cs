@@ -3,6 +3,7 @@ using App.Core.Api.Utils;
 using App.Core.Entities;
 using App.Core.Enum;
 using AspNetCoreRateLimit;
+using DotNetCore.Security;
 using FreeSql;
 using FreeSql.Internal;
 using Microsoft.AspNetCore.Http;
@@ -109,16 +110,16 @@ namespace App.Core.Api
 
         public static void AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddHash(10000, 128);
-            //services.AddCryptography("lin-cms-dotnetcore-cryptography");
-            //services.AddJsonWebToken(
-            //    new JsonWebTokenSettings(
-            //            configuration["Authentication:JwtBearer:SecurityKey"],
-            //            new TimeSpan(30, 0, 0, 0),
-            //            configuration["Authentication:JwtBearer:Audience"],
-            //            configuration["Authentication:JwtBearer:Issuer"]
-            //        )
-            //    );
+            services.AddHash(10000, 128);
+            services.AddCryptography("lin-cms-dotnetcore-cryptography");
+            services.AddJsonWebToken(
+                new JsonWebTokenSettings(
+                        configuration["Authentication:JwtBearer:SecurityKey"],
+                        new TimeSpan(30, 0, 0, 0),
+                        configuration["Authentication:JwtBearer:Audience"],
+                        configuration["Authentication:JwtBearer:Issuer"]
+                    )
+                );
         }
 
         public static void AddDIServices(this IServiceCollection services)
@@ -129,12 +130,12 @@ namespace App.Core.Api
             services.AddTransient<CustomExceptionMiddleWare>();
             services.AddHttpClient();
 
-            string serviceName = configuration.GetSection("FileStorage:ServiceName").Value;
+            //string serviceName = configuration.GetSection("FileStorage:ServiceName").Value;
 
 
-            if (string.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException("FileStorage:ServiceName未配置");
+            //if (string.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException("FileStorage:ServiceName未配置");
 
-            services.Configure<FileStorageOption>(configuration.GetSection("FileStorage"));
+            //services.Configure<FileStorageOption>(configuration.GetSection("FileStorage"));
 
             //if (serviceName == LinFile.LocalFileService)
             //{

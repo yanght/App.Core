@@ -67,10 +67,10 @@ namespace App.Core.Aop.Filter
                 linLog.Message = auditingLogAttribute.Template;
             }
 
-            AppAuthorizeAttribute linCmsAttribute = auditActionDescriptor.GetCustomAttribute<AppAuthorizeAttribute>();
-            if (linCmsAttribute != null)
+            AppAuthorizeAttribute appAttribute = auditActionDescriptor.GetCustomAttribute<AppAuthorizeAttribute>();
+            if (appAttribute != null)
             {
-                linLog.Authority = linCmsAttribute.Permission;
+                linLog.Authority = appAttribute.Permission;
             }
 
 

@@ -21,8 +21,8 @@ namespace App.Core.IdentityServer4
 
             assembly.ForEach(d =>
             {
-                T linCmsAuthorize = d.GetCustomAttribute<T>();
-                listT.Add(linCmsAuthorize);
+                T appAuthorize = d.GetCustomAttribute<T>();
+                listT.Add(appAuthorize);
             });
             return listT;
         }
@@ -39,7 +39,7 @@ namespace App.Core.IdentityServer4
             {
                 foreach (Attribute attribute in o.GetCustomAttributes())
                 {
-                    if (attribute is TableAttribute linCmsAuthorize)
+                    if (attribute is TableAttribute appAuthorize)
                     {
                         tableAssembies.Add(o);
                     }

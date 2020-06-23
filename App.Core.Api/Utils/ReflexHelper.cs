@@ -25,8 +25,8 @@ namespace App.Core.Api.Utils
 
             assembly.ForEach(d =>
             {
-                T linCmsAuthorize = d.GetCustomAttribute<T>();
-                listT.Add(linCmsAuthorize);
+                T appAuthorize = d.GetCustomAttribute<T>();
+                listT.Add(appAuthorize);
             });
             return listT;
         }
@@ -51,11 +51,11 @@ namespace App.Core.Api.Utils
             //通过反射得到控制器上的权限特性标签
             assembly.ForEach(d =>
             {
-                AppAuthorizeAttribute linCmsAuthorize = d.GetCustomAttribute<AppAuthorizeAttribute>();
+                AppAuthorizeAttribute appAuthorize = d.GetCustomAttribute<AppAuthorizeAttribute>();
                 RouteAttribute routerAttribute = d.GetCustomAttribute<RouteAttribute>();
-                if (linCmsAuthorize?.Permission != null && routerAttribute?.Template != null)
+                if (appAuthorize?.Permission != null && routerAttribute?.Template != null)
                 {
-                    linAuths.Add(new PermissionDefinition(linCmsAuthorize.Permission, linCmsAuthorize.Module, routerAttribute.Template.Replace("/", ".")));
+                    linAuths.Add(new PermissionDefinition(appAuthorize.Permission, appAuthorize.Module, routerAttribute.Template.Replace("/", ".")));
                 }
             });
 
@@ -69,12 +69,12 @@ namespace App.Core.Api.Utils
                     {
                         foreach (Attribute attribute in methodInfo.GetCustomAttributes())
                         {
-                            if (attribute is AppAuthorizeAttribute linCmsAuthorize && linCmsAuthorize.Permission.IsNotNullOrEmpty() && linCmsAuthorize.Module.IsNotNullOrEmpty())
+                            if (attribute is AppAuthorizeAttribute appAuthorize && appAuthorize.Permission.IsNotNullOrEmpty() && appAuthorize.Module.IsNotNullOrEmpty())
                             {
                                 linAuths.Add(
                                         new PermissionDefinition(
-                                                linCmsAuthorize.Permission,
-                                                linCmsAuthorize.Module,
+                                                appAuthorize.Permission,
+                                                appAuthorize.Module,
                                                 $"{routerAttribute.Template.Replace("/", ".")}+{methodInfo.Name.ToSnakeCase()}"
                                                 )
                                     );
@@ -185,7 +185,7 @@ namespace App.Core.Api.Utils
             {
                 foreach (Attribute attribute in o.GetCustomAttributes())
                 {
-                    if (attribute is TableAttribute linCmsAuthorize)
+                    if (attribute is TableAttribute appAuthorize)
                     {
                         tableAssembies.Add(o);
                     }

@@ -1,6 +1,6 @@
 ﻿namespace App.Core.Security
 {
-    public static class LinCmsClaimTypes
+    public static class AppClaimTypes
     {
         public static string Groups { get; set; } = "AppClaimTypes-Groups";
         public static string IsActive { get; set; } = "AppClaimTypes-IsActive";

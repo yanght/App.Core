@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Core.Application.Contracts.Cms.Users;
-using App.Core.Application.Contracts.Cms.Users.Dtos;
+using App.Core.Application.Contracts.Groups;
+using App.Core.Application.Contracts.Groups.Dtos;
 using App.Core.Application.Contracts.Users;
+using App.Core.Application.Contracts.Users.Dtos;
 using App.Core.Common;
 using App.Core.Data.Enum;
 using App.Core.Entities;
@@ -15,7 +16,7 @@ using App.Core.Security;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 
-namespace App.Core.Application.Cms.Users
+namespace App.Core.Application.Users
 {
     public class UserService : IUserService
     {
@@ -24,20 +25,21 @@ namespace App.Core.Application.Cms.Users
         private readonly ICurrentUser _currentUser;
         private readonly IUserIdentityService _userIdentityService;
         //private readonly IPermissionService _permissionService;
-        //private readonly IGroupService _groupService;
+        private readonly IGroupService _groupService;
         //private readonly IFileRepository _fileRepository;
 
         public UserService(IUserRepository userRepository,
             IMapper mapper,
             ICurrentUser currentUser,
-            IUserIdentityService userIdentityService
+            IUserIdentityService userIdentityService,
+            IGroupService groupService
           )
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _currentUser = currentUser;
             _userIdentityService = userIdentityService;
-          
+            _groupService = groupService;
         }
         public async Task CreateAsync(UserEntity user, List<long> groupIds, string password)
         {
@@ -62,14 +64,14 @@ namespace App.Core.Application.Cms.Users
 
             user.Active = UserActive.Active.GetHashCode();
 
-            //user.LinUserGroups = new List<LinUserGroup>();
-            //groupIds?.ForEach(groupId =>
-            //{
-            //    user.LinUserGroups.Add(new LinUserGroup()
-            //    {
-            //        GroupId = groupId
-            //    });
-            //});
+            user.UserGroups = new List<UserGroupEntity>();
+            groupIds?.ForEach(groupId =>
+            {
+                user.UserGroups.Add(new UserGroupEntity()
+                {
+                    GroupId = groupId
+                });
+            });
 
             user.UserIdentitys = new List<UserIdentity>()
             {
@@ -131,14 +133,44 @@ namespace App.Core.Application.Cms.Users
             throw new NotImplementedException();
         }
 
-        public Task<UserInformation> GetInformationAsync(long userId)
+        public async Task<UserInformation> GetInformationAsync(long userId)
         {
-            throw new NotImplementedException();
+            UserEntity linUser = await _userRepository.GetUserAsync(r => r.Id == userId);
+            if (linUser == null) return null;
+           // linUser.Avatar = _fileRepository.GetFileUrl(linUser.Avatar);
+
+            UserInformation userInformation = _mapper.Map<UserInformation>(linUser);
+            userInformation.Groups = linUser.Groups.Select(r => _mapper.Map<GroupDto>(r)).ToList();
+            userInformation.Admin = _currentUser.IsInGroup(AppConsts.Group.Admin);
+
+            return userInformation;
         }
 
         public Task<List<IDictionary<string, object>>> GetStructualUserPermissions(long userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UpdateAync(long id, UpdateUserDto updateUserDto)
+        {
+            UserEntity linUser = await _userRepository.Where(r => r.Id == id).ToOneAsync();
+            if (linUser == null)
+            {
+                throw new AppException("用户不存在", ErrorCode.NotFound);
+            }
+
+            List<long> existGroupIds = await _groupService.GetGroupIdsByUserIdAsync(id);
+
+            //删除existGroupIds有，而newGroupIds没有的
+            List<long> deleteIds = existGroupIds.Where(r => !updateUserDto.GroupIds.Contains(r)).ToList();
+
+            //添加newGroupIds有，而existGroupIds没有的
+            List<long> addIds = updateUserDto.GroupIds.Where(r => !existGroupIds.Contains(r)).ToList();
+
+            _mapper.Map(updateUserDto, linUser);
+            await _userRepository.UpdateAsync(linUser);
+            await _groupService.DeleteUserGroupAsync(id, deleteIds);
+            await _groupService.AddUserGroupAsync(id, addIds);
         }
     }
 }

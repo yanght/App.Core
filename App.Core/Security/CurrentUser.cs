@@ -16,7 +16,7 @@ namespace App.Core.Security
         }
         public long? Id => _claimsPrincipal?.FindUserId();
         public string UserName => _claimsPrincipal?.FindUserName();
-        public long[] Groups => FindClaims(LinCmsClaimTypes.Groups).Select(c => c.Value.ToLong()).ToArray();
+        public long[] Groups => FindClaims(AppClaimTypes.Groups).Select(c => c.Value.ToLong()).ToArray();
 
         public virtual Claim FindClaim(string claimType)
         {
@@ -35,7 +35,7 @@ namespace App.Core.Security
 
         public bool IsInGroup(long groupId)
         {
-            return FindClaims(LinCmsClaimTypes.Groups).Any(c => c.Value.ToLong() == groupId);
+            return FindClaims(AppClaimTypes.Groups).Any(c => c.Value.ToLong() == groupId);
         }
 
     }

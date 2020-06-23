@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using App.Core.Api.Data;
 using App.Core.Dependency;
 using App.Core.Infrastructure.Repositories;
 using App.Core.IRepositories;
@@ -39,7 +40,7 @@ namespace App.Core.Api
             builder.RegisterGeneric(typeof(AuditBaseRepository<>)).As(typeof(IAuditBaseRepository<>)).InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(AuditBaseRepository<,>)).As(typeof(IAuditBaseRepository<,>)).InstancePerLifetimeScope();
 
-            Assembly[] currentAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(r => r.FullName.Contains("LinCms.")).ToArray();
+            Assembly[] currentAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(r => r.FullName.Contains("App.Core.")).ToArray();
 
             //每次调用，都会重新实例化对象；每次请求都创建一个新的对象；
             Type transientDependency = typeof(ITransientDependency);
@@ -60,8 +61,8 @@ namespace App.Core.Api
                             !t.IsGenericType)
                 .AsImplementedInterfaces().SingleInstance();
 
-            ////builder.RegisterType<MigrationStartupTask>().SingleInstance();
-            ////builder.RegisterBuildCallback(async (c) => await c.Resolve<MigrationStartupTask>().StartAsync());
+            builder.RegisterType<MigrationStartupTask>().SingleInstance();
+            builder.RegisterBuildCallback(async (c) => await c.Resolve<MigrationStartupTask>().StartAsync());
 
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-namespace App.Core.Application.Contracts.Cms.Users
+namespace App.Core.Application.Contracts.Users
 {
  
     public interface IUserIdentityService

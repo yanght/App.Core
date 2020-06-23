@@ -46,10 +46,10 @@ namespace App.Core.Aop.Middleware
 
         async Task HandlerExceptionAsync(HttpContext context, Exception ex)
         {
-            if (ex is AppException cmsException) //自定义业务异常
+            if (ex is AppException appException) //自定义业务异常
             {
-                await JsonHandle(context, cmsException.Message, cmsException.GetErrorCode(),
-                    cmsException.GetCode());
+                await JsonHandle(context, appException.Message, appException.GetErrorCode(),
+                    appException.GetCode());
             }
             else
             {

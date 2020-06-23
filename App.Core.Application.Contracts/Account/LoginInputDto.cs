@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Core.Application.Contracts.Cms.Account
+namespace App.Core.Application.Contracts.Account
 {
     public class LoginInputDto
     {

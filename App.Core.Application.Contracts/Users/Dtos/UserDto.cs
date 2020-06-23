@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using App.Core.Entities;
 
-namespace App.Core.Application.Contracts.Cms.Users.Dtos
+namespace App.Core.Application.Contracts.Users.Dtos
 {
     public class UserDto : EntityDto
     {
@@ -14,5 +14,12 @@ namespace App.Core.Application.Contracts.Cms.Users.Dtos
         public int Active { get; set; }
        // public List<GroupDto> Groups { get; set; }
         public DateTime CreateTime { get; set; }
+    }
+
+    public class UpdateUserDto
+    {
+        public string Email { get; set; }
+        public string Nickname { get; set; }
+        public List<long> GroupIds { get; set; }
     }
 }
