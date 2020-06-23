@@ -37,7 +37,7 @@ namespace App.Core.Api
                    .UseNoneCommandParameter(true)
                    .UseMonitorCommand(cmd =>
                        {
-                           Trace.WriteLine(cmd.CommandText + ";");
+                           Console.WriteLine(cmd.CommandText + ";");
                        }
                    )
                    .Build()

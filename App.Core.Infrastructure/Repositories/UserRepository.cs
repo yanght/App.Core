@@ -21,7 +21,7 @@ namespace App.Infrastructure.Repositories
         /// <returns></returns>
         public Task<UserEntity> GetUserAsync(Expression<Func<UserEntity, bool>> expression)
         {
-             return Select.Where(expression).ToOneAsync();           
+             return Select.Where(expression).IncludeMany(m=>m.Groups).IncludeMany(m=>m.UserGroups).ToOneAsync();           
         }
 
         /// <summary>

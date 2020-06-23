@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using App.Core.Aop.Filter;
 using App.Core.Aop.Middleware;
 using App.Core.Api.SnakeCaseQuery;
 using App.Core.Application.Contracts;
@@ -122,7 +123,12 @@ namespace App.Core.Api
             services.AddTransient(typeof(IAuditBaseRepository<,>), typeof(AuditBaseRepository<,>));
             services.AddTransient<CustomExceptionMiddleWare>();
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.ValueProviderFactories.Add(new ValueProviderFactory()); //设置SnakeCase形式的QueryString参数
+                options.Filters.Add<LogActionFilterAttribute>(); // 添加请求方法时的日志记录过滤器
+                                                                 // options.Filters.Add<LinCmsExceptionFilter>(); // 添加请求方法时的日志记录过滤器
+            });
 
             services.AddDIServices();
 

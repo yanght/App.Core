@@ -57,6 +57,7 @@ namespace App.Core.Api.Controllers
         /// 得到当前登录人信息
         /// </summary>
         [HttpGet("information")]
+        [AuditingLog("查询当前用户信息")]
         public async Task<UserInformation> GetInformationAsync()
         {
             UserInformation userInformation = await _userSevice.GetInformationAsync(_currentUser.Id ?? 0);
