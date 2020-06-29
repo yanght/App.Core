@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace App.Core.Application.Contracts
+namespace App.Core.FreeSql.DbContext
 {
-    public interface IApplicationService
+    public class AdminContext
     {
-
     }
 }

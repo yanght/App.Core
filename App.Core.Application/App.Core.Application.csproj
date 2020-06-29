@@ -1,14 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.1.1" />
-    <PackageReference Include="AspNet.Security.OAuth.QQ" Version="3.1.1" />
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\App.Core.Application.Contracts\App.Core.Application.Contracts.csproj" />

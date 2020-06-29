@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace App.Core.Application.Contracts
+namespace App.Core.Application
 {
-    public interface IApplicationService
+    class ApplicationService
     {
-
     }
 }
