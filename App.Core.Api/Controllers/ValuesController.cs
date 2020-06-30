@@ -17,17 +17,22 @@ namespace App.Core.Api.Controllers
         private IFreeSql<AdminContext> _adminsql;
         private IFreeSql<LinCmsContext> _linecmssql;
         private IBookService _bookService;
-        public ValuesController(IFreeSql<AdminContext> adminsql, IFreeSql<LinCmsContext> linecmssql, IBookService bookService)
+        private IAdApiRepository _adapiService;
+        public ValuesController(IFreeSql<AdminContext> adminsql, IFreeSql<LinCmsContext> linecmssql, IBookService bookService, IAdApiRepository adapiService)
         {
             _adminsql = adminsql; _linecmssql = linecmssql; _bookService = bookService;
+            _adapiService = adapiService;
         }
 
         [HttpGet]
-        public void Get()
+        public async Task Get()
         {
-            var i = _adminsql.Ado.ExecuteScalar("select count(1) from ad_api");
-            var j = _linecmssql.Ado.ExecuteScalar("select count(1) from lin_user");
-            var k = _bookService.GetBooks();
+            //var i = _adminsql.Ado.ExecuteScalar("select count(1) from ad_api");
+            //var j = _linecmssql.Ado.ExecuteScalar("select count(1) from lin_user");
+            await _bookService.GetBooks();
+
+            await _adapiService.TranTest();
+
         }
     }
 }

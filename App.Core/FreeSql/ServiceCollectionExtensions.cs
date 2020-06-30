@@ -1,4 +1,5 @@
 ﻿using App.Core.FreeSql.Config;
+using App.Core.FreeSql.UseUnitOfWork;
 using FreeSql;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -90,6 +91,8 @@ namespace App.Core.FreeSql
                 service.AddSingleton(fsql);
                 return fsql;
             });
+
+            service.AddScoped<IUnitOfWork<T>, UnitOfWork<T>>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using App.Core.FreeSql;
+using App.Core.FreeSql.DbContext;
+using Autofac;
 using Autofac.Extras.DynamicProxy;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,10 @@ namespace App.Core.Api.Startup
 
             List<Type> interceptorServiceTypes = new List<Type>();
 
+            //builder.RegisterType<UnitOfWorkInterceptor>();
+            //builder.RegisterType<UnitOfWorkAsyncInterceptor>();
+            //interceptorServiceTypes.Add(typeof(UnitOfWorkInterceptor));
+
             builder.RegisterAssemblyTypes(servicesDllFile)
                     .Where(a => a.Name.EndsWith("Service"))
                     .AsImplementedInterfaces()
@@ -28,6 +34,8 @@ namespace App.Core.Api.Startup
                         .Where(a => a.Name.EndsWith("Repository"))
                         .AsImplementedInterfaces()
                         .InstancePerLifetimeScope();
+
+            
         }
     }
 }

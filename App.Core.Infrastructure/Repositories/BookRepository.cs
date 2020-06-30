@@ -1,28 +1,50 @@
 ﻿using App.Core.Entitys.Admin;
 using App.Core.Entitys.LinCms;
 using App.Core.FreeSql.DbContext;
+using App.Core.FreeSql.Repositories;
+using App.Core.FreeSql.UseUnitOfWork;
 using App.Core.IRepositories;
 using FreeSql;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace App.Core.Infrastructure.Repositories
 {
-    public class BookRepository : RepositoryBase<BookModel>, IBookRepository
+    public class BookRepository : RepositoryBase<BookModel, LinCmsContext>, IBookRepository
     {
-        IFreeSql<AdminContext> _adminsql;
-        public BookRepository(IFreeSql<LinCmsContext> fsql, IFreeSql<AdminContext> adminsql) : base(fsql)
+        public BookRepository(IUnitOfWork<LinCmsContext> unitOfWork) : base(unitOfWork)
         {
-            _adminsql = adminsql;
+            
         }
 
-        public object GetBooks()
+        public async Task GetBooks()
         {
-            var repo = _adminsql.GetRepository<AdApiModel>();
-            repo.Select.Count();
-            Select.Count();
-            return 0;
+            //using (var tran = UnitOfWork.GetOrBeginTransaction())
+            //{
+                    
+
+            var book = new BookModel()
+            {
+                Author = "test",
+                CreateTime = DateTime.Now,
+                CreateUserId = 0,
+                DeleteTime = DateTime.Now,
+                DeleteUserId = 0,
+                Image = "http://www.baidu.com",
+                IsDeleted = false,
+                Summary = "test",
+                Title = "title",
+                UpdateTime = DateTime.Now,
+                UpdateUserId = 0
+            };
+            var model = await InsertAsync(book);
+            model.Title = "更新title";
+            await UpdateAsync(model);
+         
+            //    tran.Commit();
+            //}
         }
     }
 }

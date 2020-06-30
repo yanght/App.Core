@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using App.Core.FreeSql;
 using App.Core.FreeSql.Config;
 using App.Core.FreeSql.DbContext;
+using App.Core.FreeSql.UseUnitOfWork;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace App.Core.Api.Startup
             services.AddFreeSql<AdminContext>();
             services.AddFreeSql<LinCmsContext>();
 
+            //services.AddSingleton(typeof(IFreeSqlUnitOfWorkManager), typeof(FreeSqlUnitOfWorkManager));
             #region Swagger
             //Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(options =>

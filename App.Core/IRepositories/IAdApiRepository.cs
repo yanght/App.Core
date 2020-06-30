@@ -1,5 +1,4 @@
 ﻿using App.Core.Entitys.Admin;
-using App.Core.Entitys.LinCms;
 using App.Core.FreeSql.DbContext;
 using App.Core.FreeSql.Repositories;
 using System;
@@ -9,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace App.Core.IRepositories
 {
-    public interface IBookRepository : IRepositoryBase<BookModel, LinCmsContext>
+    public interface IAdApiRepository : IRepositoryBase<AdApiModel, AdminContext>
     {
-        Task GetBooks();
+        Task TranTest();
     }
 }
