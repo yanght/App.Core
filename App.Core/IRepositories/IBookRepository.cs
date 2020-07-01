@@ -11,6 +11,6 @@ namespace App.Core.IRepositories
 {
     public interface IBookRepository : IRepositoryBase<BookModel, LinCmsContext>
     {
-        Task GetBooks();
+        Task<BookModel> GetBooks();
     }
 }

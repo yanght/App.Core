@@ -1,4 +1,7 @@
-﻿using System;
+﻿using App.Core.Application.Contracts.LinCms.Books.Output;
+using App.Core.Data.Output;
+using App.Core.Entitys.LinCms;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +11,6 @@ namespace App.Core.Application.Contracts.LinCms
 {
     public interface IBookService : IScopeDependency
     {
-        Task GetBooks();
+        Task<IResponseOutput<BookGetOutput>> GetBooks();
     }
 }

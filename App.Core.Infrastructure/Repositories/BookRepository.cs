@@ -16,14 +16,14 @@ namespace App.Core.Infrastructure.Repositories
     {
         public BookRepository(IUnitOfWork<LinCmsContext> unitOfWork) : base(unitOfWork)
         {
-            
+
         }
 
-        public async Task GetBooks()
+        public async Task<BookModel> GetBooks()
         {
             //using (var tran = UnitOfWork.GetOrBeginTransaction())
             //{
-                    
+
 
             var book = new BookModel()
             {
@@ -42,7 +42,8 @@ namespace App.Core.Infrastructure.Repositories
             var model = await InsertAsync(book);
             model.Title = "更新title";
             await UpdateAsync(model);
-         
+
+            return Select.WhereDynamic(1).ToOne();
             //    tran.Commit();
             //}
         }

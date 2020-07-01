@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using App.Core.Aop.Middleware;
+using App.Core.Application.Contracts.LinCms.Books;
 using App.Core.FreeSql;
 using App.Core.FreeSql.Config;
 using App.Core.FreeSql.DbContext;
-using App.Core.FreeSql.UseUnitOfWork;
 using Autofac;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace App.Core.Api.Startup
 {
@@ -40,6 +37,8 @@ namespace App.Core.Api.Startup
             services.Configure<FreeSqlCollectionConfig>(_configuration.GetSection("SqlConfig"));
             services.AddFreeSql<AdminContext>();
             services.AddFreeSql<LinCmsContext>();
+            services.AddTransient<CustomExceptionMiddleWare>();
+            services.AddAutoMapper(typeof(MapConfig).Assembly);
 
             //services.AddSingleton(typeof(IFreeSqlUnitOfWorkManager), typeof(FreeSqlUnitOfWorkManager));
             #region Swagger
@@ -94,7 +93,15 @@ namespace App.Core.Api.Startup
 
             #endregion
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                //忽略循环引用
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //使用驼峰 首字母小写                             
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                //设置时间格式
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+            }); ;
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -111,6 +118,9 @@ namespace App.Core.Api.Startup
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //异常中间件应放在MVC执行事务的中件间的前面，否则异常时UnitOfWorkMiddleware无法catch异常
+            app.UseMiddleware(typeof(CustomExceptionMiddleWare));
 
             app.UseEndpoints(endpoints =>
             {

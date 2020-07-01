@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Application.Contracts.LinCms;
+using App.Core.Data.Enums;
+using App.Core.Data.Output;
+using App.Core.Exceptions;
 using App.Core.FreeSql.DbContext;
 using App.Core.IRepositories;
 using Microsoft.AspNetCore.Http;
@@ -25,13 +28,14 @@ namespace App.Core.Api.Controllers
         }
 
         [HttpGet]
-        public async Task Get()
+        public async Task<IResponseOutput> Get()
         {
             //var i = _adminsql.Ado.ExecuteScalar("select count(1) from ad_api");
             //var j = _linecmssql.Ado.ExecuteScalar("select count(1) from lin_user");
-            await _bookService.GetBooks();
-
-            await _adapiService.TranTest();
+            var result = await _bookService.GetBooks();
+            //throw new AppException("测试错误");
+            return result;
+            //await _adapiService.TranTest();
 
         }
     }
