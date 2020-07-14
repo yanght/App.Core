@@ -29,4 +29,8 @@
     <Folder Include="Entitys\LinCms\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\App.Core.Common\App.Core.Common.csproj" />
+  </ItemGroup>
+
 </Project>

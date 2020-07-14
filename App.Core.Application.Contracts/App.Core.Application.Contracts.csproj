@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Admin\AdDocument\Input\" />
     <Folder Include="LinCms\Books\Input\" />
   </ItemGroup>
 

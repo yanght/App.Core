@@ -18,6 +18,10 @@ namespace App.Core.FreeSql.Config
     public class FreeSqlConfig
     {
         /// <summary>
+        /// 默认数据库
+        /// </summary>
+        public bool Default { get; set; }
+        /// <summary>
         /// 数据库名称
         /// </summary>
         public string Key { get; set; }

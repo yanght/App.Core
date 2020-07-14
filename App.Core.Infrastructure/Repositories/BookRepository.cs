@@ -19,7 +19,7 @@ namespace App.Core.Infrastructure.Repositories
 
         }
 
-        public async Task<BookModel> GetBooks()
+        public async Task<BookModel> AddAndUpdateBooks()
         {
             //using (var tran = UnitOfWork.GetOrBeginTransaction())
             //{

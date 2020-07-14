@@ -3,20 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core", "App.Core\App.Core.csproj", "{0A9EE1DC-9D14-4D4B-B02B-B57A0B446981}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core", "App.Core\App.Core.csproj", "{0A9EE1DC-9D14-4D4B-B02B-B57A0B446981}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core.Application", "App.Core.Application\App.Core.Application.csproj", "{28CCB0BB-DCEA-49A3-BC09-C713C3300E32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Application", "App.Core.Application\App.Core.Application.csproj", "{28CCB0BB-DCEA-49A3-BC09-C713C3300E32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core.Infrastructure", "App.Core.Infrastructure\App.Core.Infrastructure.csproj", "{E81EBCB1-C460-42FF-8D08-F06BF931EAC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Infrastructure", "App.Core.Infrastructure\App.Core.Infrastructure.csproj", "{E81EBCB1-C460-42FF-8D08-F06BF931EAC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core.Application.Contracts", "App.Core.Application.Contracts\App.Core.Application.Contracts.csproj", "{AF7B5550-1893-4D5C-9633-A4E81D276519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Application.Contracts", "App.Core.Application.Contracts\App.Core.Application.Contracts.csproj", "{AF7B5550-1893-4D5C-9633-A4E81D276519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core.Api", "App.Core.Api\App.Core.Api.csproj", "{B655150B-B35B-4531-B767-56EDF968511D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Api", "App.Core.Api\App.Core.Api.csproj", "{B655150B-B35B-4531-B767-56EDF968511D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45F26D1B-7AAD-4335-93E5-C85BB65E88DF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Core.Common", "App.Core.Common\App.Core.Common.csproj", "{E0C40537-38E7-4617-BFF6-32AFD28F126F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{B655150B-B35B-4531-B767-56EDF968511D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B655150B-B35B-4531-B767-56EDF968511D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B655150B-B35B-4531-B767-56EDF968511D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0C40537-38E7-4617-BFF6-32AFD28F126F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C40537-38E7-4617-BFF6-32AFD28F126F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C40537-38E7-4617-BFF6-32AFD28F126F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C40537-38E7-4617-BFF6-32AFD28F126F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using App.Core.FreeSql;
+﻿using App.Core.Aop;
+using App.Core.FreeSql;
 using App.Core.FreeSql.DbContext;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
@@ -18,7 +19,8 @@ namespace App.Core.Api.Startup
             Assembly assemblysRepository = Assembly.Load("App.Core.Infrastructure");
 
             List<Type> interceptorServiceTypes = new List<Type>();
-
+            builder.RegisterType<TransactionInterceptor>();
+            interceptorServiceTypes.Add(typeof(TransactionInterceptor));
             //builder.RegisterType<UnitOfWorkInterceptor>();
             //builder.RegisterType<UnitOfWorkAsyncInterceptor>();
             //interceptorServiceTypes.Add(typeof(UnitOfWorkInterceptor));

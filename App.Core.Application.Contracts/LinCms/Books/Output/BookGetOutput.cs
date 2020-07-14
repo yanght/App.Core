@@ -5,7 +5,7 @@ using System.Text;
 namespace App.Core.Application.Contracts.LinCms.Books.Output
 {
     public class BookGetOutput
-    {
+	{
 		/// <summary>
 		/// 主键Id
 		/// </summary>

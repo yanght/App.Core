@@ -35,6 +35,7 @@ namespace App.Core.Api.Startup
         {
             services.AddOptions();
             services.Configure<FreeSqlCollectionConfig>(_configuration.GetSection("SqlConfig"));
+            services.AddSimpleFreeSql();
             services.AddFreeSql<AdminContext>();
             services.AddFreeSql<LinCmsContext>();
             services.AddTransient<CustomExceptionMiddleWare>();

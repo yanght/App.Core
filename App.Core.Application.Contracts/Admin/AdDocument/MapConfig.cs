@@ -1,8 +1,8 @@
 ﻿using App.Core.Application.Contracts.Amdin.AdDocument.Output;
-using App.Core.Entitys.LinCms;
+using App.Core.Entitys.Admin;
 using AutoMapper;
 
-namespace App.Core.Application.Contracts.LinCms.Books
+namespace App.Core.Application.Contracts.Admin.AdDocument
 {
     /// <summary>
     /// 映射配置
@@ -11,7 +11,7 @@ namespace App.Core.Application.Contracts.LinCms.Books
     {
         public MapConfig()
         {
-            CreateMap<BookModel, DocumentGetOutput>();
+            CreateMap<AdDocumentModel, DocumentGetOutput>();
         }
     }
 }
