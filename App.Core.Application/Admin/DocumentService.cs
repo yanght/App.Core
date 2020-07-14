@@ -25,26 +25,26 @@ namespace App.Core.Application.Contracts.Admin
         public async Task<IResponseOutput<DocumentGetOutput>> AddAndUpdateDocument()
         {
             //using (_repo.UnitOfWork.GetOrBeginTransaction())
-            //{
-                var model = await _repo.InsertAsync(new Entitys.Admin.AdDocumentModel()
-                {
-                    Content = "tets",
-                    CreatedTime = DateTime.Now,
-                    CreatedUserId = 0,
-                    CreatedUserName = "yannis",
-                    Description = "desc",
-                    Enabled = true,
-                    Html = "htmnl",
-                    Type = 1,
-                    ParentId = 0,
-                    Label = new Random().Next().ToString(),
-                });
-                model = await _repo.GetAsync(model.Id);
-                model.Label = "1";
-                throw new AppException("事务异常");
-                await _repo.UpdateAsync(model);
-                var result = _mapper.Map<DocumentGetOutput>(model);
-                return new ResponseOutput<DocumentGetOutput>().Ok(result);
+            //{                        
+            var model = await _repo.InsertAsync(new Entitys.Admin.AdDocumentModel()
+            {
+                Content = "tets",
+                CreatedTime = DateTime.Now,
+                CreatedUserId = 0,
+                CreatedUserName = "yannis",
+                Description = "desc",
+                Enabled = true,
+                Html = "html",
+                Type = 1,
+                ParentId = 0,
+                Label = new Random().Next().ToString(),
+            });
+            model = await _repo.GetAsync(model.Id);
+            model.Label = new Random().Next().ToString() + "_1";
+            //throw new AppException("事务异常");
+            await _repo.UpdateAsync(model);
+            var result = _mapper.Map<DocumentGetOutput>(model);
+            return new ResponseOutput<DocumentGetOutput>().Ok(result);
             //}
 
         }

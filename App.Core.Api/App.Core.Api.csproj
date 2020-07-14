@@ -18,9 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.Core.Application\App.Core.Application.csproj" />
+    <ProjectReference Include="..\App.Core.Application.Contracts\App.Core.Application.Contracts.csproj" />
     <ProjectReference Include="..\App.Core.Infrastructure\App.Core.Infrastructure.csproj" />
-    <ProjectReference Include="..\App.Core\App.Core.csproj" />
   </ItemGroup>
 
 

@@ -16,14 +16,37 @@ namespace App.Core.FreeSql.Repositories
         /// <typeparam name="TDto"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
+        TDto Get<TDto>(TKey id);
+
+        /// <summary>
+        /// 获得Dto
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<TDto> GetAsync<TDto>(TKey id);
 
         /// <summary>
-        /// 根据条件获取实体
+        /// 获得实体TEntity
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        TEntity Get(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 获得实体TEntity
         /// </summary>
         /// <param name="exp"></param>
         /// <returns></returns>
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> exp);
+
+        /// <summary>
+        /// 根据条件获取Dto
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        TDto Get<TDto>(Expression<Func<TEntity, bool>> exp);
 
         /// <summary>
         /// 根据条件获取Dto

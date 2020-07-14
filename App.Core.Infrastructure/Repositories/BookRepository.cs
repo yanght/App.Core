@@ -42,7 +42,7 @@ namespace App.Core.Infrastructure.Repositories
             var model = await InsertAsync(book);
             model.Title = "更新title";
             await UpdateAsync(model);
-
+            
             return Select.WhereDynamic(1).ToOne();
             //    tran.Commit();
             //}
