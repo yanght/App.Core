@@ -41,7 +41,7 @@ namespace App.Core.Application.Contracts.Admin
             });
             model = await _repo.GetAsync(model.Id);
             model.Label = new Random().Next().ToString() + "_1";
-            //throw new AppException("事务异常");
+            throw new Exception("事务异常");
             await _repo.UpdateAsync(model);
             var result = _mapper.Map<DocumentGetOutput>(model);
             return new ResponseOutput<DocumentGetOutput>().Ok(result);

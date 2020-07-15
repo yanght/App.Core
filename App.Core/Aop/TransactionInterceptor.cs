@@ -3,6 +3,9 @@ using App.Core.Data.Output;
 using App.Core.Extensions;
 using Castle.DynamicProxy;
 using FreeSql;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -12,10 +15,11 @@ namespace App.Core.Aop
     {
         IUnitOfWork _unitOfWork;
         private readonly UnitOfWorkManager _unitOfWorkManager;
-
-        public TransactionInterceptor(UnitOfWorkManager unitOfWorkManager)
+        private readonly ILogger<TransactionInterceptor> _logger;
+        public TransactionInterceptor(ILogger<TransactionInterceptor> logger, UnitOfWorkManager unitOfWorkManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
+            _logger = logger;
         }
 
         public void Intercept(IInvocation invocation)
@@ -48,15 +52,17 @@ namespace App.Core.Aop
                 if (returnValue is IResponseOutput res && !res.Success)
                 {
                     _unitOfWork.Rollback();
+                    _logger.LogError($"{method.Name}: 事务执行失败，回滚成功。{res.Msg}");                    
                 }
                 else
                 {
                     _unitOfWork.Commit();
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 _unitOfWork.Rollback();
+                _logger.LogError(ex, $"{method.Name}: 事务执行失败，回滚成功。");
             }
             finally
             {

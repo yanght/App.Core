@@ -2,7 +2,9 @@
 using App.Core.FreeSql.UseUnitOfWork;
 using FreeSql;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,7 @@ namespace App.Core.FreeSql
 
                         if (current.DebugShowSql)
                         {
+
                             //Console.ForegroundColor = newFontColor;
                             //Console.WriteLine("\n=================================================================================\n");
                             //Console.WriteLine(executed.CommandText + "\n");
@@ -46,8 +49,8 @@ namespace App.Core.FreeSql
                             if (!string.IsNullOrWhiteSpace(parametersValue))
                             {
                                 //Console.WriteLine(parametersValue);
-                                Console.WriteLine
-                              (
+                                Log.Debug
+                             (
                                   "\n=================================================================================\n\n"
                                                               + executing.CommandText + "\n\n"
                                                               + "\n" + parametersValue +
@@ -56,8 +59,8 @@ namespace App.Core.FreeSql
                             }
                             else
                             {
-                                Console.WriteLine
-                               (
+                                Log.Debug
+                              (
                                     "\n=================================================================================\n\n"
                                                                     + executing.CommandText +
                                     "\n\n=================================================================================\n"
@@ -127,7 +130,7 @@ namespace App.Core.FreeSql
                             if (!string.IsNullOrWhiteSpace(parametersValue))
                             {
                                 //Console.WriteLine(parametersValue);
-                                Console.WriteLine
+                                Log.Debug
                               (
                                   "\n=================================================================================\n\n"
                                                               + executing.CommandText + "\n\n"
@@ -137,8 +140,8 @@ namespace App.Core.FreeSql
                             }
                             else
                             {
-                                Console.WriteLine
-                               (
+                                Log.Debug
+                                (
                                     "\n=================================================================================\n\n"
                                                                     + executing.CommandText +
                                     "\n\n=================================================================================\n"
@@ -169,7 +172,7 @@ namespace App.Core.FreeSql
                 //});
 
                 #endregion //使用FreeSql AOP做对应的业务拓展，有需要自行实现
-              
+
                 return fsql;
             });
             service.AddScoped<UnitOfWorkManager>();
