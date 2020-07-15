@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Util.Dependency;
-
 namespace App.Core.FreeSql.Repositories
 {
     public interface ISimpleRepositoryBase<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class

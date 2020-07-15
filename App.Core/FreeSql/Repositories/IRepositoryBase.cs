@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Util.Dependency;
 
 namespace App.Core.FreeSql.Repositories
 {
-    public interface IRepositoryBase<TEntity, TContext> : IBaseRepository<TEntity>, IScopeDependency
+    public interface IRepositoryBase<TEntity, TContext> : IBaseRepository<TEntity>
     where TEntity : class
     {
        

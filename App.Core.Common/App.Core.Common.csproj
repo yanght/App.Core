@@ -9,4 +9,8 @@
     <Folder Include="Extensions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Masuit.Tools.Core" Version="2.2.9.1" />
+  </ItemGroup>
+
 </Project>

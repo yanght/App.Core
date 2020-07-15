@@ -3,12 +3,7 @@ using App.Core.FreeSql.DbContext;
 using App.Core.FreeSql.Repositories;
 using App.Core.FreeSql.UseUnitOfWork;
 using App.Core.IRepositories;
-using FreeSql;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Util.Datas.Queries;
 
 namespace App.Core.Infrastructure.Repositories
 {
