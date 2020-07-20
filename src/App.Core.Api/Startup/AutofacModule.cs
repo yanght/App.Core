@@ -36,8 +36,6 @@ namespace App.Core.Api.Startup
                         .Where(a => a.Name.EndsWith("Repository"))
                         .AsImplementedInterfaces()
                         .InstancePerLifetimeScope();
-
-            
         }
     }
 }

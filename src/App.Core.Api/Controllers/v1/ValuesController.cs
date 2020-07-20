@@ -57,5 +57,12 @@ namespace App.Core.Api.Controllers.v1
             var result = await _bookService.AddAndUpdateBooks();
             return result;
         }
+
+        [HttpPost]
+        public async Task<IResponseOutput> AddAndUpdateBooksFault()
+        {
+            var result = await _bookService.AddAndUpdateBooks();
+            return result;
+        }
     }
 }

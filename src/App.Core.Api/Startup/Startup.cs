@@ -1,12 +1,8 @@
+using App.Core.Aop.Filter;
 using App.Core.Aop.Middleware;
 using App.Core.Application.Contracts;
-using App.Core.Application.Contracts.LinCms.Books;
 using App.Core.Entitys;
-using App.Core.FreeSql;
-using App.Core.FreeSql.Config;
-using App.Core.FreeSql.DbContext;
 using Autofac;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,25 +24,20 @@ namespace App.Core.Api.Startup
     {
         private static string basePath => AppContext.BaseDirectory;
         private readonly IHostEnvironment _env;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
-        {        
+        {
             _env = env;
-            _configuration = configuration;
+            Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<FreeSqlCollectionConfig>(_configuration.GetSection("SqlConfig"));
-            services.AddSimpleFreeSql();
-            services.AddFreeSql<AdminContext>();
-            services.AddFreeSql<LinCmsContext>();
-            services.AddTransient<CustomExceptionMiddleWare>();
-            services.AddAutoMapper(typeof(MapConfig).Assembly);
-
-            //services.AddSingleton(typeof(IFreeSqlUnitOfWorkManager), typeof(FreeSqlUnitOfWorkManager));
+            services.AddCsRedisCore(Configuration);
+            services.AddContext(Configuration);
+            services.AddDIServices(Configuration);
 
             #region Swagger
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
@@ -98,7 +89,7 @@ namespace App.Core.Api.Startup
             #region Api Version
             services.AddApiVersioning(options =>
             {
-                options.DefaultApiVersion = new ApiVersion(1,0);
+                options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
             }).AddVersionedApiExplorer(option =>
             {
@@ -107,7 +98,11 @@ namespace App.Core.Api.Startup
             });
             #endregion
 
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<LogActionFilterAttribute>();// 添加请求方法时的日志记录过滤器
+
+            }).AddNewtonsoftJson(options =>
             {
                 //忽略循环引用
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -115,7 +110,7 @@ namespace App.Core.Api.Startup
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 //设置时间格式
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-            }); 
+            });
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {

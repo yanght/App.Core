@@ -26,7 +26,9 @@ namespace App.Core.Application.LinCms
         {
             var book = await _repo.AddAndUpdateBooks();
             var response = _mapper.Map<BookGetOutput>(book);
-            return new ResponseOutput<BookGetOutput>().Ok(response);
+            return new ResponseOutput<BookGetOutput>().NotOk(Data.Enums.ErrorCode.Error,"凑五信息");
         }
+
+
     }
 }

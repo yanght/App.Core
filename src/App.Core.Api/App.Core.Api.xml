@@ -4,6 +4,27 @@
         <name>App.Core.Api</name>
     </assembly>
     <members>
+        <member name="M:App.Core.Api.Startup.DependencyInjectionExtensions.AddCsRedisCore(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            注册redis客户端
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:App.Core.Api.Startup.DependencyInjectionExtensions.AddContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            注册数据库连接
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:App.Core.Api.Startup.DependencyInjectionExtensions.AddDIServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            注入实例
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
         <member name="T:App.Core.Api.Startup.ConfigureSwaggerOptions">
             <summary>
             Configures the Swagger generation options.
