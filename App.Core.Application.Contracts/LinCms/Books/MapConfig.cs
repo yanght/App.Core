@@ -1,4 +1,5 @@
 ﻿using App.Core.Application.Contracts.Amdin.AdDocument.Output;
+using App.Core.Application.Contracts.LinCms.Books.Output;
 using App.Core.Entitys.LinCms;
 using AutoMapper;
 
@@ -11,7 +12,7 @@ namespace App.Core.Application.Contracts.LinCms.Books
     {
         public MapConfig()
         {
-            CreateMap<BookModel, DocumentGetOutput>();
+            CreateMap<BookModel, BookGetOutput>();
         }
     }
 }

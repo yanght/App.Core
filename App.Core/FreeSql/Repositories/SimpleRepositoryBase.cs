@@ -97,11 +97,6 @@ namespace App.Core.FreeSql.Repositories
         #endregion
 
 
-
-
-
-
-
         //public async Task<bool> SoftDeleteAsync(TKey id)
         //{
         //    await UpdateDiy

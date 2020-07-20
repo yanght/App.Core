@@ -46,5 +46,11 @@ namespace App.Core.Api.Controllers
             //await _adapiService.TranTest();
 
         }
+        [HttpPost]
+        public async Task<IResponseOutput> AddAndUpdateBooks()
+        {
+            var result = await _bookService.AddAndUpdateBooks();
+            return result;
+        }
     }
 }

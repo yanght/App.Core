@@ -1,6 +1,7 @@
 ﻿using App.Core.Aop.Attributes;
 using App.Core.Application.Contracts.Amdin.AdDocument.Output;
 using App.Core.Application.Contracts.LinCms;
+using App.Core.Application.Contracts.LinCms.Books.Output;
 using App.Core.Data.Output;
 using App.Core.FreeSql.DbContext;
 using App.Core.FreeSql.UseUnitOfWork;
@@ -21,11 +22,11 @@ namespace App.Core.Application.LinCms
             _uow = uow;
             _mapper = mapper;
         }
-        public async Task<IResponseOutput<DocumentGetOutput>> AddAndUpdateBooks()
+        public async Task<IResponseOutput<BookGetOutput>> AddAndUpdateBooks()
         {
             var book = await _repo.AddAndUpdateBooks();
-            var response = _mapper.Map<DocumentGetOutput>(book);
-            return new ResponseOutput<DocumentGetOutput>().Ok(response);
+            var response = _mapper.Map<BookGetOutput>(book);
+            return new ResponseOutput<BookGetOutput>().Ok(response);
         }
     }
 }

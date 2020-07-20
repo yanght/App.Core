@@ -23,8 +23,7 @@ namespace App.Core.Infrastructure.Repositories
         {
             //using (var tran = UnitOfWork.GetOrBeginTransaction())
             //{
-
-
+            
             var book = new BookModel()
             {
                 Author = "test",
