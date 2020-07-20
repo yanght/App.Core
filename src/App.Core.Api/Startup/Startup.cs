@@ -98,7 +98,7 @@ namespace App.Core.Api.Startup
             #region Api Version
             services.AddApiVersioning(options =>
             {
-                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.DefaultApiVersion = new ApiVersion(1,0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
             }).AddVersionedApiExplorer(option =>
             {
