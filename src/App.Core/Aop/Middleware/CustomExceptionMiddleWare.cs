@@ -20,8 +20,8 @@ namespace App.Core.Aop.Middleware
     public class CustomExceptionMiddleWare : IMiddleware
     {
         private readonly ILogger<CustomExceptionMiddleWare> _logger;
-        private readonly IWebHostEnvironment _environment;
-        public CustomExceptionMiddleWare(ILogger<CustomExceptionMiddleWare> logger, IWebHostEnvironment environment)
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _environment;
+        public CustomExceptionMiddleWare(ILogger<CustomExceptionMiddleWare> logger, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment)
         {
             _logger = logger;
             _environment = environment;
@@ -90,7 +90,7 @@ namespace App.Core.Aop.Middleware
             context.Response.StatusCode = statusCode;
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(result, settings), Encoding.UTF8); ;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(result, settings), Encoding.UTF8);
         }
 
     }

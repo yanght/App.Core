@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,12 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.Core\App.Core.csproj" />
+    <Folder Include="Admin\AdDocument\Input\" />
+    <Folder Include="LinCms\Books\Input\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Admin\AdDocument\Input\" />
-    <Folder Include="LinCms\Books\Input\" />
+    <ProjectReference Include="..\App.Core\App.Core.csproj" />
   </ItemGroup>
 
 </Project>
