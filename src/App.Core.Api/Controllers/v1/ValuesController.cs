@@ -4,17 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Application.Contracts.Admin.AdDocument;
 using App.Core.Application.Contracts.LinCms;
-using App.Core.Data.Enums;
 using App.Core.Data.Output;
-using App.Core.Exceptions;
 using App.Core.FreeSql.DbContext;
 using App.Core.IRepositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace App.Core.Api.Controllers
+namespace App.Core.Api.Controllers.v1
 {
-    [Route("api/[controller]/[action]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -34,6 +32,12 @@ namespace App.Core.Api.Controllers
             _documentService = documentService;
         }
 
+        [HttpGet]
+        public string Get()
+        {
+            return "this is v1";
+        }
+
         [HttpPost]
         public async Task<IResponseOutput> AddAndUpdateDocument()
         {
@@ -46,6 +50,7 @@ namespace App.Core.Api.Controllers
             //await _adapiService.TranTest();
 
         }
+
         [HttpPost]
         public async Task<IResponseOutput> AddAndUpdateBooks()
         {

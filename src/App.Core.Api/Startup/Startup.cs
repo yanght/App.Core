@@ -1,5 +1,7 @@
 using App.Core.Aop.Middleware;
+using App.Core.Application.Contracts;
 using App.Core.Application.Contracts.LinCms.Books;
+using App.Core.Entitys;
 using App.Core.FreeSql;
 using App.Core.FreeSql.Config;
 using App.Core.FreeSql.DbContext;
@@ -7,12 +9,17 @@ using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -43,16 +50,11 @@ namespace App.Core.Api.Startup
 
             //services.AddSingleton(typeof(IFreeSqlUnitOfWorkManager), typeof(FreeSqlUnitOfWorkManager));
             #region Swagger
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             //Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(options =>
             {
-                string ApiName = "App.Core";
-                options.SwaggerDoc("v1", new OpenApiInfo()
-                {
-                    Title = ApiName + RuntimeInformation.FrameworkDescription,
-                    Version = "v1"
-                });
-
+                options.OperationFilter<SwaggerDefaultValues>();
                 var security = new OpenApiSecurityRequirement()
                 {
                     {
@@ -80,11 +82,11 @@ namespace App.Core.Api.Startup
                     string xmlPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
                     options.IncludeXmlComments(xmlPath, true);
                     //实体层的xml文件名
-                    //string xmlEntityPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(IEntity).Assembly.GetName().Name}.xml");
-                    //options.IncludeXmlComments(xmlEntityPath);
+                    string xmlEntityPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(IEntity).Assembly.GetName().Name}.xml");
+                    options.IncludeXmlComments(xmlEntityPath);
                     //Dto所在类库
-                    //string applicationPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(IApplicationService).Assembly.GetName().Name}.xml");
-                    //options.IncludeXmlComments(applicationPath);
+                    string applicationPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(IApplicationService).Assembly.GetName().Name}.xml");
+                    options.IncludeXmlComments(applicationPath);
                 }
                 catch (Exception ex)
                 {
@@ -94,6 +96,16 @@ namespace App.Core.Api.Startup
 
             #endregion
 
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            }).AddVersionedApiExplorer(option =>
+            {
+                option.GroupNameFormat = "'v'VVVV";//api组名格式
+                option.AssumeDefaultVersionWhenUnspecified = true;//是否提供API版本服务
+            }); ;
+
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 //忽略循环引用
@@ -102,14 +114,14 @@ namespace App.Core.Api.Startup
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 //设置时间格式
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-            }); ;
+            }); 
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new AutofacModule());
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -132,12 +144,13 @@ namespace App.Core.Api.Startup
             if (_env.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
+                app.UseSwaggerUI(options =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "App.Core");
-                    //c.RoutePrefix = string.Empty;
-                    //c.OAuthClientId(Configuration["Service:ClientId"]);//客服端名称
-                    //c.OAuthAppName(Configuration["Service:Name"]); // 描述
+                    // build a swagger endpoint for each discovered API version
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    }
                 });
             }
             #endregion
