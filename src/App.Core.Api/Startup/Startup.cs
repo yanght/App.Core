@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +21,6 @@ using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace App.Core.Api.Startup
 {
@@ -32,7 +30,7 @@ namespace App.Core.Api.Startup
         private readonly IHostEnvironment _env;
         private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
-        {
+        {        
             _env = env;
             _configuration = configuration;
         }
@@ -49,6 +47,7 @@ namespace App.Core.Api.Startup
             services.AddAutoMapper(typeof(MapConfig).Assembly);
 
             //services.AddSingleton(typeof(IFreeSqlUnitOfWorkManager), typeof(FreeSqlUnitOfWorkManager));
+
             #region Swagger
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             //Register the Swagger generator, defining 1 or more Swagger documents
@@ -96,6 +95,7 @@ namespace App.Core.Api.Startup
 
             #endregion
 
+            #region Api Version
             services.AddApiVersioning(options =>
             {
                 options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -104,7 +104,8 @@ namespace App.Core.Api.Startup
             {
                 option.GroupNameFormat = "'v'VVVV";//api组名格式
                 option.AssumeDefaultVersionWhenUnspecified = true;//是否提供API版本服务
-            }); ;
+            });
+            #endregion
 
             services.AddControllers().AddNewtonsoftJson(options =>
             {
