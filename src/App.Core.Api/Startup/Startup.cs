@@ -1,33 +1,43 @@
 using App.Core.Aop.Filter;
 using App.Core.Aop.Middleware;
 using App.Core.Application.Contracts;
+using App.Core.Data.Enums;
+using App.Core.Data.Output;
 using App.Core.Entitys;
 using Autofac;
+using DotNetCore.Security;
+using Masuit.Tools;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace App.Core.Api.Startup
 {
     public class Startup
     {
-        private static string basePath => AppContext.BaseDirectory;
-        private readonly IHostEnvironment _env;
+        private static string BasePath => AppContext.BaseDirectory;
+        private readonly IWebHostEnvironment Environment;
         private readonly IConfiguration Configuration;
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            _env = env;
+            Environment = env;
             Configuration = configuration;
         }
 
@@ -35,6 +45,7 @@ namespace App.Core.Api.Startup
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddSecurity(Configuration);
             services.AddCsRedisCore(Configuration);
             services.AddContext(Configuration);
             services.AddDIServices(Configuration);
@@ -111,33 +122,123 @@ namespace App.Core.Api.Startup
                 //设置时间格式
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
+
+            #region AddJwtBearer
+            var jsonWebTokenSettings = services.BuildServiceProvider().GetRequiredService<JsonWebTokenSettings>();
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/app/oauth2/signin";
+                    options.LogoutPath = "/app/oauth2/signout";
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    //identityserver4 地址 
+                    options.Authority = Configuration["Service:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = Configuration["Service:Name"];
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // The signing key must match!
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("app-dotnetcore-SecurityKey")),
+
+                        // Validate the JWT Issuer (iss) claim
+                        ValidateIssuer = true,
+                        ValidIssuer = jsonWebTokenSettings.Issuer,
+
+                        // Validate the JWT Audience (aud) claim
+                        ValidateAudience = true,
+                        ValidAudience = jsonWebTokenSettings.Audience,
+
+                        // Validate the token expiry
+                        ValidateLifetime = true,
+
+                        // If you want to allow a certain amount of clock drift, set thatValidIssuer  here
+                        //ClockSkew = TimeSpan.Zero
+                    };
+
+                    //options.TokenValidationParameters = new TokenValidationParameters()
+                    //{
+                    //    ClockSkew = TimeSpan.Zero   //偏移设置为了0s,用于测试过期策略,完全按照access_token的过期时间策略，默认原本为5分钟
+                    //};
+
+
+                    //使用Authorize设置为需要登录时，返回json格式数据。
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            //Token expired
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            //此处代码为终止.Net Core默认的返回类型和数据结果，这个很重要哦
+                            context.HandleResponse();
+
+                            string message;
+                            ErrorCode errorCode;
+                            int statusCode = StatusCodes.Status401Unauthorized;
+
+                            if (context.Error == "invalid_token" &&
+                                context.ErrorDescription == "The token is expired")
+                            {
+                                message = "令牌过期";
+                                errorCode = ErrorCode.TokenExpired;
+                                statusCode = StatusCodes.Status422UnprocessableEntity;
+                            }
+                            else if (context.Error == "invalid_token" && context.ErrorDescription.IsNullOrEmpty())
+                            {
+                                message = "令牌失效";
+                                errorCode = ErrorCode.TokenInvalidation;
+                            }
+
+                            else
+                            {
+                                message = "请先登录" + context.ErrorDescription; //""认证失败，请检查请求头或者重新登录";
+                                errorCode = ErrorCode.AuthenticationFailed;
+                            }
+
+                            context.Response.ContentType = "application/json";
+                            context.Response.StatusCode = statusCode;
+                            context.Response.WriteAsync(ResponseOutput.NotOk(errorCode, message).ToJsonString());
+
+                            return Task.FromResult(0);
+                        }
+                    };
+                });
+
+            #endregion
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new AutofacModule());
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseAuthorization();
-
             //异常中间件应放在MVC执行事务的中件间的前面，否则异常时UnitOfWorkMiddleware无法catch异常
             app.UseMiddleware(typeof(CustomExceptionMiddleWare));
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
             #region Swagger Api文档
-            if (_env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
@@ -151,6 +252,20 @@ namespace App.Core.Api.Startup
             }
             #endregion
 
+            app.UseCors(builder =>
+            {
+                string[] withOrigins = Configuration.GetSection("WithOrigins").Get<string[]>();
+                builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins(withOrigins);
+            });
+
+            app.UseAuthentication();//认证
+
+            app.UseRouting()
+                .UseAuthorization()//授权
+                .UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -15,17 +15,17 @@ namespace App.Core.Infrastructure.Repositories
         }
         public async Task TranTest()
         {
-            //using (var tran = UnitOfWork.GetOrBeginTransaction())
-            //{
+            using (var tran = UnitOfWork.GetOrBeginTransaction())
+            {
                 var model = await Select.Where(m => m.Id == 1).FirstAsync();
 
                 model.Name = "测试修改";
 
                 await UpdateAsync(model);
 
-            //    tran.Commit();
+                tran.Commit();
 
-            //}
+            }
 
         }
     }

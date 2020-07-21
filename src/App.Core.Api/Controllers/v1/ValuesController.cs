@@ -27,7 +27,9 @@ namespace App.Core.Api.Controllers.v1
             IAdApiRepository adapiService,
             IDocumentService documentService)
         {
-            _adminsql = adminsql; _linecmssql = linecmssql; _bookService = bookService;
+            _adminsql = adminsql;
+            _linecmssql = linecmssql; 
+            _bookService = bookService;
             _adapiService = adapiService;
             _documentService = documentService;
         }

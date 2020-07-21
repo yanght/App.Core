@@ -5,6 +5,8 @@ using App.Core.FreeSql.Config;
 using App.Core.FreeSql.DbContext;
 using AutoMapper;
 using CSRedis;
+using DotNetCore.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +37,20 @@ namespace App.Core.Api.Startup
         }
         #endregion
 
+        public static void AddSecurity(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHash(10000, 128);
+            services.AddCryptography("app-dotnetcore-cryptography");
+            services.AddJsonWebToken(
+                new JsonWebTokenSettings(
+                        configuration["Authentication:JwtBearer:SecurityKey"],
+                        new TimeSpan(30, 0, 0, 0),
+                        configuration["Authentication:JwtBearer:Audience"],
+                        configuration["Authentication:JwtBearer:Issuer"]
+                    )
+                );
+        }
+
         /// <summary>
         /// 注册数据库连接
         /// </summary>
@@ -54,6 +70,8 @@ namespace App.Core.Api.Startup
         /// <param name="configuration"></param>
         public static void AddDIServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpClient();
             services.AddTransient<CustomExceptionMiddleWare>();
             services.AddAutoMapper(typeof(MapConfig).Assembly);
         }

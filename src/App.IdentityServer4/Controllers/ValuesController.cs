@@ -6,23 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace App.Core.Api.Controllers.v2
+namespace App.IdentityServer4.Controllers
 {
     [Authorize]
-    [ApiVersion("2.0", Deprecated = true)]
-    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        public JsonResult Get()
+        public IActionResult Get()
         {
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
-        }
-        [HttpGet]
-        public string Get1()
-        {
-            return "this is v2";
         }
     }
 }

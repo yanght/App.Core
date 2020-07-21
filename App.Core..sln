@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Common", "src\App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core.Test", "src\App.Core.Test\App.Core.Test.csproj", "{9248F0EA-E150-4B5E-BDEF-C5026ADE08C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.IdentityServer4", "src\App.IdentityServer4\App.IdentityServer4.csproj", "{B64CED6A-6449-46C2-BE67-71ED2C7D7166}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{9248F0EA-E150-4B5E-BDEF-C5026ADE08C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9248F0EA-E150-4B5E-BDEF-C5026ADE08C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9248F0EA-E150-4B5E-BDEF-C5026ADE08C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64CED6A-6449-46C2-BE67-71ED2C7D7166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64CED6A-6449-46C2-BE67-71ED2C7D7166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64CED6A-6449-46C2-BE67-71ED2C7D7166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64CED6A-6449-46C2-BE67-71ED2C7D7166}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
