@@ -10,7 +10,7 @@
             </summary>
             <param name="loginInputDto">用户名/密码：admin/123qwe</param>
         </member>
-        <member name="M:App.Core.Api.Controllers.v1.AccountController.GetRefreshToken">
+        <member name="M:App.Core.Api.Controllers.v1.AccountController.GetRefreshToken(System.String)">
             <summary>
             刷新用户的token
             </summary>

@@ -88,20 +88,18 @@ namespace App.Core.Api.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet("refresh")]
-        public async Task<JObject> GetRefreshToken()
+        public async Task<JObject> GetRefreshToken(string refreshToken)
         {
-            string refreshToken;
-
             string authHeader = Request.Headers["Authorization"];
 
-            if (authHeader != null && authHeader.StartsWith("Bearer"))
-            {
-                refreshToken = authHeader.Substring("Bearer ".Length).Trim();
-            }
-            else
-            {
-                throw new AppException(" 请先登录.", ErrorCode.RefreshTokenError);
-            }
+            //if (authHeader != null && authHeader.StartsWith("Bearer"))
+            //{
+            //    refreshToken = authHeader.Substring("Bearer ".Length).Trim();
+            //}
+            //else
+            //{
+            //    throw new AppException(" 请先登录.", ErrorCode.RefreshTokenError);
+            //}
 
             HttpClient client = _httpClientFactory.CreateClient();
 
@@ -109,7 +107,7 @@ namespace App.Core.Api.Controllers.v1
             {
                 Address = _configuration["Service:Authority"],
                 Policy = {
-                        RequireHttps = true
+                        RequireHttps = false
                     }
             });
 
@@ -118,17 +116,14 @@ namespace App.Core.Api.Controllers.v1
                 throw new AppException(disco.Error);
             }
 
-            TokenResponse response = await client.RequestTokenAsync(new TokenRequest
+            TokenResponse response = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
+                RefreshToken = refreshToken,
                 Address = disco.TokenEndpoint,
                 GrantType = OidcConstants.GrantTypes.RefreshToken,
-
                 ClientId = _configuration["Service:ClientId"],
                 ClientSecret = _configuration["Service:ClientSecrets"],
 
-                Parameters = new Dictionary<string, string>
-                    { { OidcConstants.TokenRequest.RefreshToken, refreshToken }
-                    }
             });
 
             if (response.IsError)

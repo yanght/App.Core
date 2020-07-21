@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Test;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace App.IdentityServer4
 {
@@ -12,7 +13,7 @@ namespace App.IdentityServer4
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new IdentityResource[]
-            {             
+            {
                 new IdentityResources.OpenId()
             };
         }
@@ -44,7 +45,8 @@ namespace App.IdentityServer4
                     },
                     AllowedScopes =
                     {
-                        Configuration["Service:Name"]
+                        Configuration["Service:Name"],
+                        StandardScopes.OfflineAccess, //如果要获取refresh_tokens ,必须在scopes中加上OfflineAccess
                     }
                 }
             };
