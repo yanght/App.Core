@@ -122,7 +122,7 @@ namespace App.Core.Api.Controllers.v1
                 Address = disco.TokenEndpoint,
                 GrantType = OidcConstants.GrantTypes.RefreshToken,
                 ClientId = _configuration["Service:ClientId"],
-                ClientSecret = _configuration["Service:ClientSecrets"],
+                ClientSecret = _configuration["Service:ClientSecret"],
 
             });
 
